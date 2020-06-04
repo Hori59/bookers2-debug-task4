@@ -14,16 +14,17 @@ User.create!(name:  "Example User",
   User.create!(name:  name,
                email: email,
                password:              password,
-               password_confirmation: password,
-               activated: true,
-               activated_at: Time.zone.now)
+               password_confirmation: password)
+               # activated: true,
+               # activated_at: Time.zone.now)
 end
 
 # マイクロポスト
 users = User.order(:created_at).take(6)
-50.times do
-  body = Faker::Lorem.sentence(5)
-  users.each { |user| user.books.create!(body: body) }
+50.times do |n|
+  title = "Title #{n+1}"
+  body = "Text #{n+1}"
+  users.each { |user| user.books.create!(title: title, body: body) }
 end
 
 # リレーションシップ

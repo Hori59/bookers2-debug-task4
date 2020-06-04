@@ -9,7 +9,7 @@ class UsersController < ApplicationController
   end
 
   def index
-  	@users = User.all #一覧表示するためにUserモデルのデータを全て変数に入れて取り出す。
+  	@users = User.all.page(params[:page]).per(10) #一覧表示するためにUserモデルのデータを全て変数に入れて取り出す。
   	@book = Book.new #new bookの新規投稿で必要（保存処理はbookコントローラー側で実施）
   end
 
@@ -20,12 +20,26 @@ class UsersController < ApplicationController
   def update
   	@user = User.find(params[:id])
     @book = Book.new
-    @books = @user.books
+    @books = @user.books.page(params[:page]).per(10)
   	if @user.update(user_params)
   		redirect_to user_path(@user), notice: "successfully updated user!"
   	else
   		render "edit"
   	end
+  end
+
+  def following
+    @title = "Following"
+    @user  = User.find(params[:id])
+    @users = @user.following.page(params[:page]).per(10)
+    render 'relationships/show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user  = User.find(params[:id])
+    @users = @user.followers.page(params[:page]).per(10)
+    render 'relationships/show_follow'
   end
 
   private
