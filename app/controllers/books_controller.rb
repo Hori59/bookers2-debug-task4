@@ -6,11 +6,12 @@ class BooksController < ApplicationController
     @book_show = Book.find(params[:id])
     @user = User.find(@book_show.user_id)
     @book = Book.new
+    @book_comment = BookComment.new
   end
 
   def index
     @book = Book.new
-  	@books = Book.all #一覧表示するためにBookモデルの情報を全てくださいのall
+  	@books = Book.all.page(params[:page]).per(10) #一覧表示するためにBookモデルの情報を全てくださいのall
   end
 
   def create
