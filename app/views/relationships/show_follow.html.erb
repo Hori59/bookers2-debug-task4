@@ -21,11 +21,16 @@
               <% unless current_user == user %>
                 <% if current_user.following?(user) %>
                   <td>
-                    <%= link_to "フォロー外す", current_user.active_relationships.find_by(followed_id: user.id), method: :delete %>
+                    <%= form_for(current_user.active_relationships.find_by(followed_id: user.id), html: { method: :delete }) do |f| %>
+                    <%= f.submit "フォロー外す", class: "btn btn-link" %>
+                    <% end %>
                   </td>
                 <% else %>
                   <td>
-                    <%= link_to "フォローする", relationships_path(user), method: :post %>
+                    <%= form_for(current_user.active_relationships.build) do |f| %>
+                    <div><%= hidden_field_tag :followed_id, user.id %></div>
+                    <%= f.submit "フォローする", class: "btn byn-link" %>
+                    <% end %>
                   </td>
                 <% end %>
               <% end %>
